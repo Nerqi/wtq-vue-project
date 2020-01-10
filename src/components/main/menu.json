@@ -1,6 +1,6 @@
 [
   {"menu_id": 1, "menu_name": "用户指引", "menu_icon": "ios-briefcase", "menu_url": "userGuide"},
-  {"menu_id": 2, "menu_name": "组件", "menu_url": "component", "menu_icon": "logo-buffer", "children_list": [
-    {"menu_id": 2.0, "menu_name": "按钮图标", "menu_url": "component-resourceManagement"}
+  {"menu_id": 2, "menu_name": "组件", "menu_url": "components", "menu_icon": "logo-buffer", "children_list": [
+    {"menu_id": 2.1, "menu_name": "按钮图标", "menu_url": "icon-button", "parent_menu_id": 2}
   ] }
 ]

@@ -72,16 +72,16 @@ module.exports = {
   productionSourceMap: false,
   // 这里写你调用接口的基础路径，来解决跨域，如果设置了代理，那你本地开发环境的axios的baseUrl要写为 '' ，即空字符串
   devServer: {
-    port: 8080,
-    proxy: { // 设置代理
-      '/aialm': {
-        target: 'http://10.248.68.27:9094/', // 生产10.248.68.27:9094   测试10.12.1.30:28080  测试分支上传
-        changeOrigin: true
-      },
-      '/oauth': {
-        target: 'http://10.248.68.27:9094/', // 生产10.248.68.27:9094   测试10.12.1.20:9094
-        changeOrigin: true
-      }
-    }
+    port: 8080
+    // proxy: { // 设置代理
+    //   '/aialm': {
+    //     target: 'http://10.248.68.27:9094/', // 生产10.248.68.27:9094   测试10.12.1.30:28080  测试分支上传
+    //     changeOrigin: true
+    //   },
+    //   '/oauth': {
+    //     target: 'http://10.248.68.27:9094/', // 生产10.248.68.27:9094   测试10.12.1.20:9094
+    //     changeOrigin: true
+    //   }
+    // }
   }
 }

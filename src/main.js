@@ -15,6 +15,7 @@ import { HttpPlugin } from '../src/libs/http'
 import pbulicFunc from './assets/conf/publicFunc.js'
 Vue.use(iView)
 Vue.use(HttpPlugin)
+require('./api/mock.js')
 /**
  * @description 注册admin内置插件
  */

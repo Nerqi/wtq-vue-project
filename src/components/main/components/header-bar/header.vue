@@ -47,9 +47,8 @@
   </div>
 </template>
 <script>
-  import listDemo from './listDemo'
-  import Menu from '../menu'
-  import services from '../../../api/services'
+  import listDemo from '../listDemo'
+  import Menu from '../../menu'
   export default {
     name: 'HeaderBar',
     props: {
@@ -65,8 +64,7 @@
         selected: false,
         user_info: '管理员',
         groupName: '前端开发',
-        pubTime: '1995-05-27',
-        system_notice_list: []
+        pubTime: '1995-05-27'
       }
     },
     computed: {
@@ -75,6 +73,9 @@
       },
       sider_menu() {
         return Menu
+      },
+      system_notice_list() {
+        return listDemo.system_notice_list
       },
       access_token() {
         return this.$store.getters['user/getAccess_token'] || ''
@@ -86,16 +87,8 @@
       }
     },
     mounted() {
-     this.getSystemNoticeList()
     },
     methods: {
-      getSystemNoticeList() {
-        this.$http.post(services.mock.header_system_notice_list).then(res => {
-          if (res && res.data) {
-            this.system_notice_list = res.data
-          }
-        })
-      },
       visivle(e) {
         if (e === true) {
           if (!this.newRoute) {

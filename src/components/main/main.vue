@@ -5,11 +5,11 @@
     </Header>
     <Layout>
       <Home v-if="type === 'home'"></Home>
-      <Sider class="sider" :style="{height: siderHeight, minWidth: siderWidth}" v-show="type === 'main'">
-        <Menu theme="light" width="auto" ref="menu" @on-select="handleSelect" :active-name="activeName" :open-names="openName" accordion>
+      <Sider :style="{height: siderHeight, minWidth: siderWidth}" v-show="type === 'main'">
+        <Menu theme="dark" width="auto" ref="menu" @on-select="handleSelect" :active-name="activeName" :open-names="openName" accordion>
           <div v-for="item in menu_list" :key="item.menu_url">
             <MenuItem v-if="!item.children_list" :name="item.menu_url"><Icon :type="item.menu_icon" />{{item.menu_name}}</MenuItem>
-            <Submenu :name="item.menu_url" v-if="item.children_list">
+            <Submenu v-if="item.children_list" :name="item.menu_id">
               <template slot="title">
                 <Icon :type="item.menu_icon" />
                 {{item.menu_name}}
@@ -19,7 +19,11 @@
           </div>
         </Menu>
       </Sider>
-      <Content style="background-color: #ffffff;" :style="{height: siderHeight}" v-show="type === 'main'">
+      <Content :style="{height: siderHeight}" v-show="type === 'main'" class="content">
+        <div class="content-breadcrumb">
+          <header-bread-crumb show-icon  :list="breadCrumbList"></header-bread-crumb>
+        </div>
+        <div class="content-tags"></div>
         <router-view></router-view>
       </Content>
     </Layout>
@@ -31,12 +35,14 @@
 <script>
   import Home from '../../view/home/home'
   import HeaderBar from './components/header'
+  import headerBreadCrumb from './components/header-bar/headerBreadcrumb'
   import FooterBar from '../../components/main/components/footer'
   import Menu from './menu'
   export default {
     name: 'Main',
     components: {
       HeaderBar,
+      headerBreadCrumb,
       FooterBar,
       Home
     },
@@ -53,19 +59,25 @@
     },
     computed: {
       menu_list() {
+        this.$store.commit('menu/setSiderMenuMap', Menu)
         return Menu
+      },
+      breadCrumbList () {
+        return this.$store.state.menu.breadCrumbList
       }
     },
     watch: {
       '$route' (newRoute) {
+        this.activeName = newRoute.name
         if (newRoute.name === 'home') {
           this.type = 'home'
         } else {
           this.type = 'main'
         }
-        let tmp = newRoute.name.split('-')
-        if (tmp[0] === 'url') {
-          this.openName = ['url']
+        this.$store.commit('menu/setBreadCrumb', newRoute)
+        let SiderMenuMap = this.$store.state.menu.siderMenuMap
+        if (SiderMenuMap.has(newRoute.name) && SiderMenuMap.get(newRoute.name).parent_menu_id) {
+          this.openName.push(SiderMenuMap.get(newRoute.name).parent_menu_id)
         } else {
           this.openName = []
         }
@@ -78,7 +90,7 @@
       } else {
         this.type = 'main'
       }
-      this.activeName = 'userGuide'
+      this.activeName = this.menu_list[0].menu_url
     },
     mounted () {},
     methods: {
@@ -96,10 +108,13 @@
       padding: 0;
     }
     .ivu-layout-sider {
-      background: #fff;
+      background: #001529;
+    }
+    .ivu-menu-item > i {
+      margin-right: 13px;
     }
     .ivu-layout-footer {
-      background: #001529;
+      background: #11477a;
       color: #515a6e;
     }
     .ivu-menu {
@@ -107,6 +122,18 @@
     }
     .ivu-menu-item {
       font-size: 1rem!important;
+    }
+    .content{
+      .content-breadcrumb{
+        width: 100%;
+        height: 2rem;
+        background: #fff;
+      }
+      .content-tags{
+        width: 100%;
+        height: 2rem;
+        background-color: green;
+      }
     }
   }
 </style>

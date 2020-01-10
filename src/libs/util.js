@@ -50,32 +50,33 @@ export const getMenuByRouter = (list, access) => {
 }
 
 /**
- * @param {Array} routeMetched 当前路由metched
- * @returns {Array}
+ * homeRoute 首页
+ * route 路由监听
+ * 面包屑格式：   首页 / 一级菜单/ 二级菜单/ 当前菜单
  */
 export const getBreadCrumbList = (route, homeRoute) => {
-  let homeItem = { ...homeRoute, icon: homeRoute.meta.icon }
-  let routeMetched = route.matched
-  if (routeMetched.some(item => item.name === homeRoute.name)) return [homeItem]
-  let res = routeMetched.filter(item => {
-    return item.meta === undefined || !item.meta.hideInBread
-  }).map(item => {
-    let meta = { ...item.meta }
-    if (meta.title && typeof meta.title === 'function') {
-      meta.__titleIsFunction__ = true
-      meta.title = meta.title(route)
+  let obj = {
+    menu_icon: route.name,
+    menu_id: route.name,
+    menu_name: route.name
+  }
+  return [homeRoute, obj]
+}
+/**
+ * param 侧边菜单list
+ * 存储问map格式
+ */
+export const getSiderMenuMap = (param) => {
+  let map = new Map()
+  for (let i = 0; i < param.length; i++) {
+    map.set(param[i].menu_url, param[i])
+    if (param[i].children_list && param[i].children_list.length) {
+      for (let j = 0; j < param[i].children_list.length; j++) {
+        map.set(param[i].children_list[j].menu_url, param[i].children_list[j])
+      }
     }
-    let obj = {
-      icon: (item.meta && item.meta.icon) || '',
-      name: item.name,
-      meta: meta
-    }
-    return obj
-  })
-  res = res.filter(item => {
-    return !item.meta.hideInMenu
-  })
-  return [{ ...homeItem, to: homeRoute.path }, ...res]
+  }
+  return map
 }
 
 export const getRouteTitleHandled = (route) => {

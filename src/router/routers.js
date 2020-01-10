@@ -17,30 +17,63 @@ import Main from '@/components/main'
  */
 
 export default [
-  { path: '', redirect: '/pages/home' },
   {
     path: '/login',
     name: 'login',
     meta: {
-      title: 'Login - 登录',
-      hideInMenu: true
+      title: '登录'
     },
     component: () => import('@/view/login/login.vue')
+  },
+  {
+    path: '/',
+    name: '_home',
+    redirect: '/home',
+    component: Main,
+    meta: {
+      title: '首页'
+    },
+    children: [
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import('@/view/home/home.vue')
+      }
+    ]
   },
   {
     path: '/pages',
     name: 'pages',
     component: Main,
+    meta: {
+      hideInBread: true
+    },
     children: [
-      {
-        path: 'home',
-        name: 'home',
-        component: () => import('@/view/home/home.vue')
-      },
       {
         path: 'userGuide',
         name: 'userGuide',
+        meta: {
+          title: '新用户指引'
+        },
         component: () => import('@/view/single-page/userGuide/userGuide.vue')
+      }
+    ]
+  },
+  {
+    path: '/components',
+    name: 'components',
+    meta: {
+      title: '组件'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'icon-button',
+        name: 'icon-button',
+        meta: {
+          title: '按钮图标'
+        },
+        component: () => import('@/view/single-page/icon-button/icon-button.vue')
       }
     ]
   },
